@@ -39,13 +39,12 @@ button{width:100%; padding:14px; background:#1f3c88; color:#fff; border:none; bo
       <form id="form">
         <!-- CHEF -->
        <div class="section-title">Chef du groupe</div>
-        
         <div class="field">
-          <label>Nom de groupe</label>
-          <div class="row">
-    <input type="text" id="chef_nameteam" name="chef_nameteam" placeholder="Nom du groupe" required>
-    
-  </div>
+  <label>Nom du groupe</label>
+  <input type="text" name="group_name" placeholder="Nom du groupe" required>
+</div>
+        <div class="field">
+          
   <label>Nom & Prénom – Classe</label>
   <div class="row">
     <input type="text" id="chef_name" name="chef_name" placeholder="Nom et Prénom" required>
@@ -113,7 +112,7 @@ button{width:100%; padding:14px; background:#1f3c88; color:#fff; border:none; bo
 </div>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxcmIyIEhiiCwf4Sa2GVPDw4FCG8UAarfuf7gasbwKkuCScdr-1yv2X4FK0QcQVRCso8A/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbwJ-dJXQv1QF_6y-tTk7DrLOSjhs1jf2R7cqrzas7PRr3IhFNg1OmN8tvEiLQOoVAoCRA/exec"; // ضع هنا رابط Web App من Google Script
 
 const form = document.getElementById("form");
 const formBox = document.getElementById("formBox");
@@ -122,13 +121,30 @@ const successBox = document.getElementById("successBox");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // استخدم FormData مباشرة
-  const formData = new FormData(form);
+  // اجمع كل البيانات في كائن
+  const payload = {
+    group_name: form.group_name.value,
+    chef_name: form.chef_name.value,
+    chef_class: form.chef_class.value,
+    chef_email: form.chef_email.value,
+    chef_phone: form.chef_phone.value,
+    m1_name: form.m1_name.value,
+    m1_class: form.m1_class.value,
+    m2_name: form.m2_name.value,
+    m2_class: form.m2_class.value,
+    m3_name: form.m3_name.value,
+    m3_class: form.m3_class.value,
+    m4_name: form.m4_name.value,
+    m4_class: form.m4_class.value
+  };
 
   try {
     const res = await fetch(scriptURL, {
       method: "POST",
-      body: formData
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
     });
 
     const text = await res.text();
@@ -136,10 +152,6 @@ form.addEventListener("submit", async (e) => {
     if (text === "SUCCESS") {
       formBox.style.display = "none";
       successBox.style.display = "block";
-    } else if (text === "EMAIL_EXISTS") {
-      alert("❌ Cet email est déjà utilisé");
-    } else if (text === "LIMIT_REACHED") {
-      alert("❌ Le nombre maximum de 10 équipes est atteint");
     } else {
       alert("❌ Erreur serveur: " + text);
     }
@@ -151,8 +163,22 @@ form.addEventListener("submit", async (e) => {
 });
 </script>
 
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
